@@ -1,8 +1,6 @@
-# Job
-- start_time
-- end_time
-- process_time
-- machine_number
+# WIP(Job)
+- LOT_ID
+
 
 # Machine
 - Jobs
