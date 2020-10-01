@@ -5,8 +5,6 @@ class WIP():
         setattr(self, configure.to_dict())
         self.configure = configure.to_dict()
         
-    
-
     def __repr__(self):
         print(self.configure)
 
@@ -22,6 +20,7 @@ class WIP():
 #讀取方式
 # lot_id001=WIP(tool_df[0][])
 
+#測試用
 if __name__ == '__main__':
     print("hello world")
     pass

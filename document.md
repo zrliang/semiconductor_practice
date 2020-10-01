@@ -26,9 +26,10 @@
 2. create jobs
 
 ## Questions
-1. 全部寫在同一檔案?
-2. 讀取方式(ex:machine &recipe)
-3. id要嘛
-4. canrun_tool
-5. setuptime
+1. 全部寫在同一檔案? 分開
+2. 讀取方式(ex:machine &recipe) 
+3. id要嘛 ok
+4. canrun_tool  切開
+5. setuptime   有
 6. 函式之間的關係
+7. seris>>dit
