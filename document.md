@@ -2,6 +2,10 @@
 - eqp_id
 - recover_time +
 
+# EOQ_RECIPE(程式)
+- eqp_id
+- recipe
+- process_time
 
 # WIP(Jobs)
 - lot_id
@@ -12,18 +16,17 @@
 - recipe +
 - canrun_tool
 
-# EOQ_RECIPE
-- ?
 
+# set_up_time
 
 # chromosome
 
-
 ## Process
 1. import data
-    + 123
+    + 
 2. create jobs
 
-
 ## Questions
-1. 
+1. 全部寫在同一檔案?
+2. 讀取方式(ex:machine &recipe)
+3. 先做job的
