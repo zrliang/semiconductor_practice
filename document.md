@@ -14,8 +14,7 @@
 - arrive_t +
 - urgent_w +
 - recipe +
-- canrun_tool
-
+- canrun_tool ? 多參數*
 
 # set_up_time
 
@@ -29,4 +28,7 @@
 ## Questions
 1. 全部寫在同一檔案?
 2. 讀取方式(ex:machine &recipe)
-3. 先做job的
+3. id要嘛
+4. canrun_tool
+5. setuptime
+6. 函式之間的關係
