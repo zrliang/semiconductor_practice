@@ -9,6 +9,7 @@ class WIP():
             setattr(self, i, self.configure[i])
         
         self.processTime = []
+        
 
 df = pd.read_excel("./semiconductor_data.xlsx", sheet_name=2, dtype=str)
 jobs = []
