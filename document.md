@@ -33,3 +33,20 @@
 5. setuptime   有
 6. 函式之間的關係
 7. seris>>dit
+
+##
+setattr(object, name, value)
+
+参数
+object -- 对象。
+name -- 字符串，对象属性。
+value -- 属性值。
+
+EX
+>>> setattr(a, 'bar', 5)       # 设置属性 bar 值
+>>> a.bar
+5
+
+indent引數是縮排
+
+
