@@ -1,10 +1,15 @@
 # Jobs (wip)(eqp_recipe)
+## Attribute
 - configure
 - processTime
 - machineID
 - startTime
 - endTime
-+ AA
+## Function
+- set_machine_id
+- set_start_time
+- get_end_time
+
 
 # Machines (tool)
 - configure
@@ -15,7 +20,7 @@
 
 # set_up_time
 
-# chromosome
+
 
 ## Process
 1. import data
