@@ -1,20 +1,17 @@
-# Tool(Machines)
-- eqp_id
-- recover_time +
+# Jobs (wip)(eqp_recipe)
+- configure
+- processTime
+- machineID
+- startTime
+- endTime
++ AA
 
-# EOQ_RECIPE(程式)
-- eqp_id
-- recipe
-- process_time
+# Machines (tool)
+- configure
 
-# WIP(Jobs)
-- lot_id
-- qty +
-- r_qt +
-- arrive_t +
-- urgent_w +
-- recipe +
-- canrun_tool ? 多參數*
+# Chromosome
+
+
 
 # set_up_time
 
