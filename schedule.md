@@ -11,6 +11,9 @@
 
 
 # 10/22
+重讀OO
 
+[x-village](https://github.com/x-village/python-course)
 
 # 10/29
+1. 先排工作給機器

@@ -5,7 +5,7 @@
 - machineID
 - startTime
 - endTime
-## Function
+## Method
 - set_machine_id
 - set_start_time
 - get_end_time
@@ -14,12 +14,12 @@
 # Machines (tool)
 ## Attribute
 - configure
-## Function
+## Method
 - add_job
 
 # Chromosome
 ## Attribute
-## Function
+## Method
 
 
 # set_up_time
