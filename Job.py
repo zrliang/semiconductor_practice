@@ -17,17 +17,16 @@ class Job():
         for i in self.configure.index:   #LOT_ID、OPE_NO... to object
             setattr(self, i, self.configure[i])
 
-    def set_probability(self, probabilities):
-        m_probability = probabilities[0]
-        last  = 0
-        for key in self.canRunMachine.keys():
-            if m_probability > last and m_probability < key:
-                self.machineID = self.canRunMachine[key]
-            else:
-                last = key
-
-        
-        pass
+    
+    # def set_probability(self, probabilities):
+    #     m_probability = probabilities[0]
+    #     last  = 0
+    #     for key in self.canRunMachine.keys():
+    #         if m_probability > last and m_probability < key:
+    #             self.machineID = self.canRunMachine[key]
+    #         else:
+    #             last = key   
+    #     pass
 
     def set_machine_id(self, machineID):
         self.machineID = machineID
