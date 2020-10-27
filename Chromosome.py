@@ -13,8 +13,8 @@ class Chromosome():
 
     def get_probability(self, index):
         
-        # if len(self.probability) > 0 and self.size + index < len(self.probability):
-        #     return self.probability[index], self.probability[self.size + index]
+        if len(self.probability) > 0 and self.size + index < len(self.probability):
+            return self.probability[index], self.probability[self.size + index]
 
     def generate_probability(self):
         if self.size != 0:
