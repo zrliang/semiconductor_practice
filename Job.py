@@ -9,27 +9,10 @@ class Job():
         self.canRunMachine={}
         self.generate_canrunM()
 
-        # self.canRunMachine = self.configure["CANRUN_TOOL"]
-        #     0.33333 : "machine1",
-        #     0.66666 : "machine7",
-        #     1 : "machine8"
-        # }
-        
         self.machineID = ''  #var
         self.startTime = 0 #var
         self.endTime = 0 #var
-        self.probability = 0
-
-
-    # def set_probability(self, probabilities):
-    #     m_probability = probabilities[0]
-    #     last  = 0
-    #     for key in self.canRunMachine.keys():
-    #         if m_probability > last and m_probability < key:
-    #             self.machineID = self.canRunMachine[key]
-    #         else:
-    #             last = key   
-    #     pass
+        self.probability = []
 
     def generate_canrunM(self):
         allM=self.configure["CANRUN_TOOL"]
@@ -47,10 +30,19 @@ class Job():
         self.canRunMachine = dict(zip(keys, cut_canrunmachine))
 
         return self.canRunMachine
-    
+    #
 
-    def set_machine_id(self, machineID):
-        self.machineID = machineID
+    def set_machine_id(self, probabilities): #probabilities=[選機,排序]
+        self.probability=probabilities #set prob
+        m_probability = probabilities[0]
+        last  = 0
+        for key in self.canRunMachine.keys():
+            if m_probability > last and m_probability < key:
+                self.machineID = self.canRunMachine[key]
+                break
+            else:
+                last = key   
+        return self.machineID,self.probability
 
     def set_start_time(self, time):
         self.startTime = time

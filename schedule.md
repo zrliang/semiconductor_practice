@@ -16,5 +16,7 @@
 [x-village](https://github.com/x-village/python-course)
 
 # 10/29
-切開可用機器
-1. 先排工作給機器
+1. 切開可用機器
+2. 先排工作給機器
+
+# 11/5
