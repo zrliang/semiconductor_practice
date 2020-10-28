@@ -31,7 +31,6 @@ class Job():
 
         return self.canRunMachine
     #
-
     def set_machine_id(self, probabilities): #probabilities=[選機,排序]
         self.probability=probabilities #set prob
         m_probability = probabilities[0]

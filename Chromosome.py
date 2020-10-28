@@ -28,8 +28,7 @@ class Chromosome():
         # print(type(linspace))
         # self.probability = random.sample(list(linspace), self.size * 2)
         for i in range(self.size * 2):
-            self.probability.append(random.random()) 
-            
+            self.probability.append(random.random())  
         return self.probability
 
         # # if self.size != 0:
