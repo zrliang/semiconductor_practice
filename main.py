@@ -1,6 +1,5 @@
 import pandas as pd
 import json
-#from Machine import *
 from Job import * 
 from Machine import * 
 from Chromosome import * 
@@ -26,28 +25,19 @@ for i in range(len(tool.values)):
 ## one chromosome
 for j in range(len(jobs)):
     jobs[j].set_machine_id(chromosomes[0].get_probability(j)) #one chromosome
-    # if j<20:，
-    #     print(jobs[j].machineID)
 
 for i in range(len(machines)): #10
     for j in range(len(jobs)): #100
         machines[i].add_job(jobs[j].LOT_ID,jobs[j].machineID)
-    print(len(machines[i].jobs))
+    print(f"Machine{i+1}:" ,len(machines[i].jobs))
+print("Machine 1 's jobs:",machines[0].jobs)
 
-# print(jobs[0].canRunMachine)
-# print(jobs[0].probability)
-# print(jobs[0].machineID)
 
 prob = chromosomes[0].probability
 #plt.hist(prob, bins=50)
 plt.scatter(range(0, len(prob)), prob)
 plt.show()
-#print(jobs[0].probability)
 
-#print(jobs[1].canRunMachine)
-
-#print(chromosomes[0].get_probability(0))
-#jobs[0].choose_machine(chromosomes[0].get_probability(0))
 
 # for i in range(len(jobs)):
 #     print(jobs[i].machineID)
