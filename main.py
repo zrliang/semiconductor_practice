@@ -23,20 +23,24 @@ for i in range(len(tool.values)):
     machines.append(Machine(tool.iloc[i]))
 
 ## one chromosome
+#for i in range(len(chromosomes)):
 for j in range(len(jobs)):
-    jobs[j].set_machine_id(chromosomes[0].get_probability(j)) #one chromosome
+    jobs[j].set_machine_id(chromosomes[0].get_probability(j)) #[0] first chromosome
 
 for i in range(len(machines)): #10
     for j in range(len(jobs)): #100
-        machines[i].add_job(jobs[j].LOT_ID,jobs[j].machineID)
+        machines[i].add_job(jobs[j].LOT_ID,jobs[j].machineID,jobs[j].probability[1])
+        pass
+    machines[i].sort_job()
     print(f"Machine{i+1}:" ,len(machines[i].jobs))
 print("Machine 1 's jobs:",machines[0].jobs)
+print("Machine 1 's jobs:",machines[0].job_sort_prob)
+print("Machine 1 's jobs:",machines[0].sorted_jobs)
 
 
-prob = chromosomes[0].probability
 #plt.hist(prob, bins=50)
-plt.scatter(range(0, len(prob)), prob)
-plt.show()
+#plt.scatter(range(0, len(prob)), prob)
+#plt.show()
 
 
 # for i in range(len(jobs)):
