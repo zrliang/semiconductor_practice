@@ -48,12 +48,18 @@ for i in range(len(machines)):
     for j in range(len(jobs)): 
         if machines[i].configure["EQP_ID"]==jobs[j].machineID:
             machines[i].jobs.append(jobs[j])
-    #machines[i].sort_job()
+    machines[i].convert_to_dicts()
+    machines[i].sort_job()
+
+#print(machines[0].jobs2)
+
 
 
 for i in range(len(machines[0].jobs)):
     print(machines[0].jobs[i].LOT_ID)
-
+print("------")
+for i in range(len(machines[0].jobs)):
+    print(machines[0].sorted_jobs[i]["LOT_ID"])
 #for i in range(len(machines)):
 
 

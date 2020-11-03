@@ -7,7 +7,7 @@ class Job():
             setattr(self, i, self.configure[i])
         self.processTime = eqp_recipe[eqp_recipe["RECIPE"] == self.configure["RECIPE"]] #一張表 #filter to recipe #Y8000
         self.canRunMachine={}
-        self.generate_canrunM() #
+        self.generate_canrunM()
 
         self.machineID = ''  #var
         self.startTime = 0 #var
@@ -45,7 +45,7 @@ class Job():
 
     def set_start_time(self, time):
         self.startTime = time
-        processTime = int(self.processTime[ self.processTime["EQP_ID"] == self.machineID ]["PROCESS_TIME"]) #對應到的值
+        processTime = int(self.processTime[ self.processTime["EQP_ID"] == self.machineID ]["PROCESS_TIME"]) #!
         self.endTime = self.startTime + processTime
 
     def get_end_time(self):

@@ -6,6 +6,7 @@ class Machine(object):
         for i in self.configure.index:   #LOT_ID、OPE_NO... to object
             setattr(self, i, self.configure[i])
         self.jobs = [] #未排
+        self.jobs2 = []
         self.job_sort_prob=[]
         self.sorted_jobs=[] 
 
@@ -28,10 +29,22 @@ class Machine(object):
     #     else:
     #         print("no add job first!")
 
+    def convert_to_dicts(self):
+        '''把物件列表轉換為字典列表'''
+        obj_arr = []
+        for o in self.jobs:
+        #把Object物件轉換成Dict物件
+            dict = {}
+            dict.update(o.__dict__)
+            obj_arr.append(dict)
+        self.jobs2=obj_arr
+
+        return obj_arr
+
+
     def sort_job(self):
         for i in range(len(self.jobs)):
-            self.sorted_jobs = sorted(self.jobs[i].probability[1], reverse = True)
-
+            self.sorted_jobs = sorted(self.jobs2,key = lambda e:e['probability'][1],reverse = True) #二維排序(x[1]針對欄位二) 由大到小
+            #self.sorted_jobs = sorted(self.jobs[i].probability[1], reverse = True)
     def clear_job(self):
-        
         pass
