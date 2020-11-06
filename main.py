@@ -53,16 +53,12 @@ for i in range(len(machines)):
 
 #print(machines[0].jobs2)
 
-
-
 for i in range(len(machines[0].jobs)):
     print(machines[0].jobs[i].LOT_ID)
 print("------")
 for i in range(len(machines[0].jobs)):
     print(machines[0].sorted_jobs[i]["LOT_ID"])
 #for i in range(len(machines)):
-
-
 
 
 # for i in range(len(machines)):

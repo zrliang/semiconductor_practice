@@ -1,3 +1,4 @@
+from Job import *
 
 class Machine(object):
     def __init__(self,configure):
@@ -6,7 +7,7 @@ class Machine(object):
         for i in self.configure.index:   #LOT_ID、OPE_NO... to object
             setattr(self, i, self.configure[i])
         self.jobs = [] #未排
-        self.jobs2 = []
+        self.jobs_dict = []
         self.job_sort_prob=[]
         self.sorted_jobs=[] 
 
@@ -37,14 +38,22 @@ class Machine(object):
             dict = {}
             dict.update(o.__dict__)
             obj_arr.append(dict)
-        self.jobs2=obj_arr
+        self.jobs_dict=obj_arr
 
         return obj_arr
 
 
     def sort_job(self):
         for i in range(len(self.jobs)):
-            self.sorted_jobs = sorted(self.jobs2,key = lambda e:e['probability'][1],reverse = True) #二維排序(x[1]針對欄位二) 由大到小
+            self.sorted_jobs = sorted(self.jobs_dict,key = lambda e:e['probability'][1],reverse = True) #二維排序(x[1]針對 jobs物件 的prob[1]) 由大到小
             #self.sorted_jobs = sorted(self.jobs[i].probability[1], reverse = True)
+
+        currentTime = int(self.configure["RECOVER_TIME"])
+        print(currentTime)
+
+        for i in range(len(self.sorted_jobs)):
+            self.jobs[i].set_start_time(currentTime)
+            currentTime = self.jobs[i].get_end_time()
+
     def clear_job(self):
         pass
