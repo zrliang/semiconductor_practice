@@ -62,18 +62,20 @@ for i in range(len(machines[0].jobs)):
     print(machines[0].jobs[i].endTime)
 print("------")
 
+#得Makespan
 
+#
 
-#甘特圖
-df=[]
-for i in range(len(machines)):
-    for j in range(len(machines[i].jobs)):    
-        df.append(dict(Task=machines[i].jobs[j].LOT_ID, Start='2020-11-07 %s'%datetime.timedelta(minutes=machines[i].jobs[j].startTime),
-        Finish='2020-11-07 %s'%datetime.timedelta(minutes=machines[i].jobs[j].endTime),Resource=machines[i].EQP_ID))
+# #甘特圖
+# df=[]
+# for i in range(len(machines)):
+#     for j in range(len(machines[i].jobs)):    
+#         df.append(dict(Task=str(machines[i].jobs[j].LOT_ID), Start='2020-11-07 %s'%datetime.timedelta(minutes=int(machines[i].jobs[j].startTime)),
+#         Finish='2020-11-07 %s'%datetime.timedelta(minutes=int(machines[i].jobs[j].endTime)),Resource=str(machines[i].EQP_ID)))
 
-#呈現圖表
-fig = px.timeline(df, x_start="Start", x_end="Finish", y="Resource", color="Task",text="Task")
-fig.show()
+# #呈現圖表
+# fig = px.timeline(df, x_start="Start", x_end="Finish", y="Resource", color="Task",text="Task")
+# fig.show()
 
 
 

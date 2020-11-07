@@ -1,5 +1,5 @@
 from Job import *
-
+import json
 class Machine(object):
     def __init__(self,configure):
         self.configure=configure #
@@ -43,10 +43,10 @@ class Machine(object):
         return obj_arr
 
 
+
     def sort_job(self):
-        for i in range(len(self.jobs)):
-            self.sorted_jobs = sorted(self.jobs_dict,key = lambda e:e['probability'][1],reverse = True) #二維排序(x[1]針對 jobs物件 的prob[1]) 由大到小
-            #self.sorted_jobs = sorted(self.jobs[i].probability[1], reverse = True)
+        #for i in range(len(self.sorted_jobs)):
+        self.sorted_jobs = sorted(self.jobs_dict,key = lambda e:e['probability'][1],reverse = True) #二維排序(x[1]針對 jobs物件 的prob[1]) 由大到小
 
         currentTime = int(self.configure["RECOVER_TIME"])
         #print(currentTime)
