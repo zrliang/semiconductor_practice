@@ -49,9 +49,9 @@ class Machine(object):
             #self.sorted_jobs = sorted(self.jobs[i].probability[1], reverse = True)
 
         currentTime = int(self.configure["RECOVER_TIME"])
-        print(currentTime)
+        #print(currentTime)
 
-        for i in range(len(self.sorted_jobs)):
+        for i in range(len(self.jobs)):
             self.jobs[i].set_start_time(currentTime)
             currentTime = self.jobs[i].get_end_time()
 

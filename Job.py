@@ -44,9 +44,9 @@ class Job():
         return self.machineID,self.probability
 
     def set_start_time(self, time):
-        self.startTime = time
-        processTime = int(self.processTime[ self.processTime["EQP_ID"] == self.machineID ]["PROCESS_TIME"]) #!
-        self.endTime = self.startTime + processTime
+        self.startTime = round(time,3)
+        processTime = int(self.processTime[ self.processTime["EQP_ID"] == self.machineID ]["PROCESS_TIME"]) *  int(self.configure["QTY"])/25  #!
+        self.endTime = round(self.startTime + processTime,3)
 
     def get_end_time(self):
         return self.endTime

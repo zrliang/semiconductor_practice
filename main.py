@@ -5,6 +5,9 @@ from Machine import *
 from Chromosome import * 
 import matplotlib.pyplot as plt
 
+import plotly.express as px
+import datetime
+
 # Read data
 wip = pd.read_excel("./semiconductor_data.xlsx", sheet_name=2, dtype=str)
 eqp = pd.read_excel("./semiconductor_data.xlsx", sheet_name=0, dtype=str)
@@ -55,25 +58,24 @@ for i in range(len(machines)):
 
 for i in range(len(machines[0].jobs)):
     print(machines[0].jobs[i].LOT_ID)
+    print(machines[0].jobs[i].startTime)
+    print(machines[0].jobs[i].endTime)
 print("------")
-for i in range(len(machines[0].jobs)):
-    print(machines[0].sorted_jobs[i]["LOT_ID"])
-#for i in range(len(machines)):
 
 
-# for i in range(len(machines)):
-#     currenTime= machines[i].recoverTime
-#     for j in range(len(machines[i].sorted_jobs)):
-#         machines[i].sorted_jobs[j].set_start_time(currenTime)
-#         currenTime = machines[i].sorted_jobs[j].get_end_time()
+
+#甘特圖
+df=[]
+for i in range(len(machines)):
+    for j in range(len(machines[i].jobs)):    
+        df.append(dict(Task=machines[i].jobs[j].LOT_ID, Start='2020-11-07 %s'%datetime.timedelta(minutes=machines[i].jobs[j].startTime),
+        Finish='2020-11-07 %s'%datetime.timedelta(minutes=machines[i].jobs[j].endTime),Resource=machines[i].EQP_ID))
+
+#呈現圖表
+fig = px.timeline(df, x_start="Start", x_end="Finish", y="Resource", color="Task",text="Task")
+fig.show()
 
 
-#plt.hist(prob, bins=50)
-#plt.scatter(range(0, len(prob)), prob)
-#plt.show()
 
-
-# for i in range(len(jobs)):
-#     print(jobs[i].machineID)
 
     
