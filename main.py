@@ -13,58 +13,77 @@ wip = pd.read_excel("./semiconductor_data.xlsx", sheet_name=2, dtype=str)
 eqp = pd.read_excel("./semiconductor_data.xlsx", sheet_name=0, dtype=str)
 tool = pd.read_excel("./semiconductor_data.xlsx", sheet_name=1, dtype=str)
 
-#
+# ---------------Frame----------------
+# create jobs
 jobs = []
-for i in range(len(wip.values)): #job len
+for i in range(len(wip.values)): #job len (100)
     jobs.append(Job(wip.iloc[i], eqp))
 
-#
+# create chromosomes
 chromosomes = []
 for i in range(10):
-    chromosomes.append(Chromosome(len(jobs)))
+    chromosomes.append(Chromosome(len(jobs))) #input ()
 
-#
+# create machine
 machines=[]
 for i in range(len(tool.values)):
     machines.append(Machine(tool.iloc[i]))
 
-## one chromosome
-#for i in range(len(chromosomes)):
 
-#
-for j in range(len(jobs)):
-    jobs[j].set_machine_id(chromosomes[0].get_probability(j)) #[0] first chromosome
+# ------------------------------------
 
-# for i in range(len(machines)): #10
-#     for j in range(len(jobs)): #100
-#         machines[i].add_job(jobs[j].LOT_ID,jobs[j].machineID,jobs[j].probability[1])
-#         pass
-#     machines[i].sort_job()
+# 一條
 
-#     print(f"Machine{i+1}:" ,len(machines[i].jobs))
-# print("Machine 1 's jobs:",machines[0].jobs)
-# print("Machine 1 's jobs:",machines[0].job_sort_prob)
-# print("Machine 1 's jobs:",machines[0].sorted_jobs)
+for k in range(len(chromosomes)):
 
-# add jobs to machine(object)
-for i in range(len(machines)):
-    for j in range(len(jobs)): 
-        if machines[i].configure["EQP_ID"]==jobs[j].machineID:
-            machines[i].jobs.append(jobs[j])
-    machines[i].convert_to_dicts()
-    machines[i].sort_job()
+    # set_machine_id
+    for j in range(len(jobs)):
+        jobs[j].set_machine_id(chromosomes[k].get_probability(j)) 
+
+    # add jobs to machine(object) 可改在裡面
+    for i in range(len(machines)):
+        for j in range(len(jobs)): 
+            if machines[i].configure["EQP_ID"]==jobs[j].machineID:
+                machines[i].jobs.append(jobs[j])
+        machines[i].convert_to_dicts()
+        machines[i].sort_job()
+
+    # add machine to chromosome(object)
+    for j in range(len(machines)):
+        chromosomes[k].machines.append(machines[j])
+    chromosomes[k].getMakespan()
+
+    # clear job
+    for i in range(len(machines)):
+        machines[i].clear_job()
+
+
+
+
 
 #print(machines[0].jobs2)
 
-for i in range(len(machines[0].jobs)):
-    print(machines[0].jobs[i].LOT_ID)
-    print(machines[0].jobs[i].startTime)
-    print(machines[0].jobs[i].endTime)
-print("------")
+# for i in range(len(machines[0].jobs)):
+#     print(machines[0].jobs[i].LOT_ID)
+#     print(machines[0].jobs[i].startTime)
+#     print(machines[0].jobs[i].endTime)
+# print(machines[0].startTime)
+# print(machines[0].endTime)
+# print("------")
 
-#得Makespan
+#get Makespan
+# 寫在裡面
+# for i in range(len(machines)):
+#     print(machines[i].endTime)
+#     if machines[i].endTime > chromosomes[0].makespan:
+#         chromosomes[0].makespan= machines[i].endTime
+# print(chromosomes[0].makespan)
 
-#
+#Mating
+
+#Mutation
+
+#Selection
 
 # #甘特圖
 # df=[]

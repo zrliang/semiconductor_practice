@@ -7,6 +7,10 @@ class Chromosome():
         self.size = size
         self.generate_probability()
 
+        self.jobs=[]
+        self.machines=[]
+        self.makespan=0
+
     def __str__(self): #須為字串str
         return self.probability
 
@@ -18,15 +22,23 @@ class Chromosome():
 
     def generate_probability(self):
  
-        for i in range(self.size * 2):
+        for i in range(self.size * 2): #
             self.probability.append(random.random())  
         return self.probability
+    
+    def getMakespan(self):
+        for i in range(len(self.machines)):
+            print(self.machines[i].endTime)
+            if self.machines[i].endTime > self.makespan:
+                self.makespan= self.machines[i].endTime
+        print(self.makespan)
+        print("--------")
 
     #交配
 
     def Mating(self):
         pass
-    
+
     #突變
     def mutation(self):
         pass

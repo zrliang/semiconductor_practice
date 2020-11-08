@@ -6,10 +6,13 @@ class Machine(object):
         self.recoverTime = int(self.configure["RECOVER_TIME"])
         for i in self.configure.index:   #LOT_ID、OPE_NO... to object
             setattr(self, i, self.configure[i])
+        self.startTime= int(self.configure["RECOVER_TIME"])
+
         self.jobs = [] #未排
         self.jobs_dict = []
         self.job_sort_prob=[]
-        self.sorted_jobs=[] 
+        self.sorted_jobs=[]
+        self.endTime=0
 
     # def add_job(self,job_id,job_machine_id,job_sort_prob):
     #     if self.configure["EQP_ID"]==job_machine_id:
@@ -54,6 +57,10 @@ class Machine(object):
         for i in range(len(self.jobs)):
             self.jobs[i].set_start_time(currentTime)
             currentTime = self.jobs[i].get_end_time()
+        self.endTime=currentTime
 
     def clear_job(self):
-        pass
+        self.jobs = [] 
+        self.jobs_dict = []
+        self.job_sort_prob=[]
+        self.sorted_jobs=[]
