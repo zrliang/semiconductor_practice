@@ -14,7 +14,6 @@ class Chromosome():
     def __str__(self): #須為字串str
         return self.probability
 
-
     def get_probability(self, index): #return [選機,排序]
         
         if len(self.probability) > 0 and self.size + index < len(self.probability):
