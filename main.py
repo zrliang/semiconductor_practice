@@ -73,9 +73,9 @@ for j in range(len(machines[0].sorted_jobs)):
 #甘特圖
 df=[]
 for i in range(len(machines)):
-    for j in range(len(machines[i].jobs)):    
-        df.append(dict(Task=str(machines[i].sorted_jobs[j].LOT_ID), Start='2020-11-07 %s'%datetime.timedelta(minutes=int(machines[i].sorted_jobs[j].startTime)),
-        Finish='2020-11-07 %s'%datetime.timedelta(minutes=int(machines[i].sorted_jobs[j].endTime)),Resource=str(machines[i].EQP_ID)))
+    for j in range(len(machines[i].sorted_jobs)):    
+        df.append(dict(Task=str(machines[i].sorted_jobs[j].LOT_ID), Start='2020-11-07 %s'%datetime.timedelta(minutes=float(machines[i].sorted_jobs[j].startTime)),
+        Finish='2020-11-07 %s'%datetime.timedelta(minutes=float(machines[i].sorted_jobs[j].endTime)),Resource=str(machines[i].EQP_ID)))
 
 
 #呈現圖表
