@@ -7,8 +7,8 @@ class Chromosome():
         self.size = size
         self.generate_probability()
 
-        self.jobs=[]
-        self.machines=[]
+        self.jobs=[] # X
+        self.machines=[] # X
         self.makespan=0
 
     def __str__(self): #須為字串str
