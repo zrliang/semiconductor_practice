@@ -57,13 +57,15 @@ class Machine(object):
            
             self.sorted_jobs[i].set_start_time(currentTime)
 
+            # 0~-2個
             if i != len(self.sorted_jobs)-1:
-                p1= int(self.sorted_jobs[i].LOT_ID[3:6])
+                p1= int(self.sorted_jobs[i].LOT_ID[3:6]) #LOT030
                 p2= int(self.sorted_jobs[i+1].LOT_ID[3:6])
 
                 currentTime = self.sorted_jobs[i].get_end_time() + setuptime_Table.at[p1,p2]
 
-            else: #the last
+            #the last
+            else: 
                 currentTime = self.sorted_jobs[i].get_end_time()
                
         self.endTime=currentTime

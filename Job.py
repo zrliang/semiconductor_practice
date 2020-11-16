@@ -8,6 +8,7 @@ class Job():
         self.processTime = eqp_recipe[eqp_recipe["RECIPE"] == self.configure["RECIPE"]] #一張表 #filter to recipe #Y8000
         self.canRunMachine={}
         self.generate_canrunM()
+        self.arrive_time= float(self.configure["ARRIV_T"])
 
         self.machineID = ''  #var
         self.startTime = 0 #var
@@ -45,7 +46,9 @@ class Job():
         return self.machineID,self.probability
 
     def set_start_time(self, time):
-        self.startTime = round(time,0)
+        self.startTime = self.arrive_time
+        if time >= self.startTime:
+            self.startTime = round(time,0)
         processTime = int(self.processTime[ self.processTime["EQP_ID"] == self.machineID ]["PROCESS_TIME"]) *  int(self.configure["QTY"])/25  #!
         self.endTime = round(self.startTime + processTime,0)
 
