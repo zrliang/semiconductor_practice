@@ -83,17 +83,21 @@ for i in range(len(machines[0].sorted_jobs)):
 df=[]
 for i in range(len(machines)):
     for j in range(len(machines[i].sorted_jobs)):    
-        df.append(dict(Task=str(machines[i].sorted_jobs[j].LOT_ID), 
+        df.append(
+        dict(Task=str(machines[i].sorted_jobs[j].LOT_ID), 
         Start='2020-11-07 %s'%datetime.timedelta(seconds=float(machines[i].sorted_jobs[j].startTime)),
         Finish='2020-11-07 %s'%datetime.timedelta(seconds=float(machines[i].sorted_jobs[j].endTime)),
-        Machine=str(machines[i].EQP_ID),
-        Recipe=machines[i].sorted_jobs[j].RECIPE))
+        Recipe=machines[i].sorted_jobs[j].RECIPE,
+        Machine=machines[i].EQP_ID))
 
 
 #呈現圖表
-fig = px.timeline(df, x_start="Start", x_end="Finish", y="Machine", color="Recipe",text="Task")
-fig.show()
+fig1 = px.timeline(df, x_start="Start", x_end="Finish", y="Machine", color="Recipe",text="Task")
+#fig2 = px.timeline(df, x_start="Start", x_end="Finish", y="Machine", color="Task",text="Task")
+#sfig.update_yaxes(autorange="reversed")
 
+fig1.show()
+#fig2.show()
 
 
     
