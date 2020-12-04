@@ -35,7 +35,7 @@ class Chromosome():
 
     #交配
 
-    def Mating(self):
+    def Crossover(self):
         pass
 
     #突變

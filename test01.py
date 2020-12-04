@@ -9,17 +9,20 @@ import random
 import plotly.express as px
 import datetime
 from copy import deepcopy
+import time
+
+start = time.process_time()
 
 # Read data
-wip = pd.read_excel("./semiconductor_data(test).xlsx", sheet_name=2, dtype=str)
-eqp = pd.read_excel("./semiconductor_data(test).xlsx", sheet_name=0, dtype=str)
-tool = pd.read_excel("./semiconductor_data(test).xlsx", sheet_name=1, dtype=str)
-setup_time = pd.read_excel("./semiconductor_data(test).xlsx", sheet_name=3, index_col=0)
+wip = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=2, dtype=str)
+eqp = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=0, dtype=str)
+tool = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=1, dtype=str)
+setup_time = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=3, index_col=0)
 
-population_size=2  #6666666666666666666666
-num_iteration =3
-crossover_rate=1    #6666666666666666666666
-mutation_rate=1     #6666666666666666666666
+population_size=10  #66666
+num_iteration =10
+crossover_rate=1    #66666
+mutation_rate=1     #66666
 
 # ---------------Frame----------------
 # create jobs
@@ -31,11 +34,6 @@ for i in range(len(wip.values)): #job len (100)
 chromosomes = []
 for i in range(population_size):
     chromosomes.append(Chromosome(len(jobs))) #input ()
-
-# test  #6666666666666666666666
-# chromosomes = []
-# for i in range(population_size):
-#     chromosomes.append(Chromosome(6)) #input ()
 
 # create machine
 machines=[]
@@ -49,11 +47,10 @@ MakespanRecord=[]
 for x in range(num_iteration):
     #------------------------Crossover------------------------------------
     ##
-    parent_list= deepcopy(chromosomes)
+    parent_list = deepcopy(chromosomes)
     offspring_list= deepcopy(chromosomes)
     s=list(np.random.permutation(population_size)) #[0,2,3,1]
     #s=[0,1,2,3]
-    #print(s)
     for m in range(int(population_size/2)): #2
         crossover_prob=np.random.rand()
         if crossover_rate>=crossover_prob: 
@@ -61,9 +58,9 @@ for x in range(num_iteration):
             parent1= deepcopy(parent_list[s[2*m]].probability)
             parent2= deepcopy(parent_list[s[2*m+1]].probability)
 
-            size=range(1,len(jobs)+1)  #染色體大小 #10+10(range(1,21))  #只有前半 #1~100 #666
+            size=range(1,len(jobs)*2 +1)  #染色體大小 #10+10(1~20)   #1~100 
             #test
-            # size=range(1,7)  #66666
+            # size=range(1,7)  #6666666666666666666666
 
             CutPoint=random.sample(size, 2) 
             CutPoint.sort()
@@ -78,44 +75,29 @@ for x in range(num_iteration):
             offspring_list[s[2*m]].probability = deepcopy(child1)
             offspring_list[s[2*m+1]].probability = deepcopy(child2)
 
-    # for i in range(4):
-    #     print(parent_list[i].probability)
-    # print("----")
-    # for i in range(4):  
-    #     print(offspring_list[i].probability)
-
-    #print(len(chromosomes[0].probability))
-
-    # for i in range(population_size):
-    #     print(chromosomes[i].makespan)
-    # print("s",s)
-
     #------------------------Mutation------------------------------------
     s=list(np.random.permutation(population_size)) #[0,2,3,1]
     #print(s)
     for m in range(len(offspring_list)):
             mutation_prob=np.random.rand()
             if mutation_rate >= mutation_prob:
-
-                #size=range(0,len(jobs))  #染色體大小 #10+10(range(1,21))  #只有前半 #1~100 #666
+                
+                size=range(0,len(jobs)*2)  #染色體大小 #10+10(0~19)  #1~100 
                 #test
                 size=range(0,6)  #0-5  #6666666666666666666666
                 one_gene=random.sample(size, 1) 
                 #print("第",m+1,"次",one_gene[0])
                 offspring_list[s[m]].probability[one_gene[0]] = random.random()
 
-    # for i in range(4):  
-    #     print(offspring_list[i].probability)
-
     #-------------------- fitness value -------------------------------------
     total_chromosomes=deepcopy(parent_list)+deepcopy(offspring_list)
 
-    # for i in range(len(total_chromosomes)):
+    # print("--total_chromosomes--")   
+    # for i in range(8):
     #     print(total_chromosomes[i].probability)
 
-    # 
     for k in range(len(total_chromosomes)):
-
+        total_chromosomes[k].makespan = 0
         # job set_probability
         for j in range(len(jobs)):
             jobs[j].set_probability(total_chromosomes[k].get_probability(j)) 
@@ -133,14 +115,16 @@ for x in range(num_iteration):
                 total_chromosomes[k].makespan=machines[i].endTime
 
             machines[i].clear_job()
-        #print("-------")
-        #print(total_chromosomes[k].makespan)
-
+        
+        # print(total_chromosomes[k].makespan)
 
     #print("-------")
     #-----------------Selection----------------------
     sorted_total_chromosomes = sorted(total_chromosomes, key=lambda e:e.makespan, reverse = False) #排序
 
+    chromosomes= deepcopy(sorted_total_chromosomes[:population_size]) #elite #下一代 #list
+    MakespanRecord.append(chromosomes[0].makespan)
+    
     # #輪盤法
     # def sum(num): #分母
     #     sum = 0
@@ -175,70 +159,68 @@ for x in range(num_iteration):
     #     if(temp not in select_index):
     #         select_index.append(temp)
 
-    chromosomes= deepcopy(sorted_total_chromosomes[:population_size]) #elite #下一代 #list
-    MakespanRecord.append(chromosomes[0].makespan)
-
-print(MakespanRecord)
-
-#解封
-# # -----------------Result----------------------
-
-# ## final job & machine condition
-# # job set_probability
-
-# for j in range(len(jobs)):
-#     jobs[j].set_probability(chromosomes[0].get_probability(j)) 
-
-# # add jobs to machine(object) 可改在裡面
-# for i in range(len(machines)):
-#     for j in range(len(jobs)): 
-#         if machines[i].configure["EQP_ID"]==jobs[j].machineID:
-#             machines[i].jobs.append(jobs[j])
-#     machines[i].sort_job(setup_time)
-
-# # record makespan & clear job
-# for i in range(len(machines)):
-#     if machines[i].endTime > chromosomes[0].makespan :
-#         chromosomes[0].makespan=machines[i].endTime
-
-# #收斂圖
-# plt.plot([i for i in range(len(MakespanRecord))],MakespanRecord,'b') #x,y為list資料
-# plt.ylabel('makespan',fontsize=15)
-# plt.xlabel('generation',fontsize=15)
-# plt.show()
+    # chromosomes=[]
+    # for i in select_index:
+    #     chromosomes.append(sorted_total_chromosomes[i])
 
 
-# #甘特圖
-# #時間限制(超過24hr:1440 分)
-# df=[]
-# for i in range(len(machines)):
-#     for j in range(len(machines[i].sorted_jobs)): 
 
-#         if  machines[i].sorted_jobs[j].startTime > float(machines[i].sorted_jobs[j].R_QT)*60:
-#             df.append(
-#             dict(Task=str(machines[i].sorted_jobs[j].LOT_ID), 
-#             Start='2020-11-07 %s'%datetime.timedelta(seconds=float(machines[i].sorted_jobs[j].startTime)),
-#             Finish='2020-11-07 %s'%datetime.timedelta(seconds=float(machines[i].sorted_jobs[j].endTime)),
-#             Recipe='broken',
-#             Machine=machines[i].EQP_ID))
+# -----------------Result----------------------
+
+## final job & machine condition
+# job set_probability
+
+for j in range(len(jobs)):
+    jobs[j].set_probability(chromosomes[0].get_probability(j)) 
+
+# add jobs to machine(object) 可改在裡面
+for i in range(len(machines)):
+    for j in range(len(jobs)): 
+        if machines[i].configure["EQP_ID"]==jobs[j].machineID:
+            machines[i].jobs.append(jobs[j])
+    machines[i].sort_job(setup_time)
+
+# record makespan & clear job
+for i in range(len(machines)):
+    if machines[i].endTime > chromosomes[0].makespan :
+        chromosomes[0].makespan=machines[i].endTime
+
+end = time.process_time()
+processT=end-start
+print("執行時間:",processT)
+
+#收斂圖
+plt.plot([i for i in range(len(MakespanRecord))],MakespanRecord,'b') #x,y為list資料
+plt.ylabel('makespan',fontsize=15)
+plt.xlabel('generation',fontsize=15)
+plt.show()
+
+#甘特圖
+#時間限制(超過24hr:1440 分)
+df=[]
+for i in range(len(machines)):
+    for j in range(len(machines[i].sorted_jobs)): 
+
+        if  machines[i].sorted_jobs[j].startTime > float(machines[i].sorted_jobs[j].R_QT)*60:
+            df.append(
+            dict(Task=str(machines[i].sorted_jobs[j].LOT_ID), 
+            Start='2020-11-07 %s'%datetime.timedelta(seconds=float(machines[i].sorted_jobs[j].startTime)),
+            Finish='2020-11-07 %s'%datetime.timedelta(seconds=float(machines[i].sorted_jobs[j].endTime)),
+            Recipe='broken',
+            Machine=machines[i].EQP_ID))
     
-#         else:
-#             df.append(
-#             dict(Task=str(machines[i].sorted_jobs[j].LOT_ID), 
-#             Start='2020-11-07 %s'%datetime.timedelta(seconds=float(machines[i].sorted_jobs[j].startTime)),
-#             Finish='2020-11-07 %s'%datetime.timedelta(seconds=float(machines[i].sorted_jobs[j].endTime)),
-#             Recipe=machines[i].sorted_jobs[j].RECIPE,
-#             Machine=machines[i].EQP_ID))
+        else:
+            df.append(
+            dict(Task=str(machines[i].sorted_jobs[j].LOT_ID), 
+            Start='2020-11-07 %s'%datetime.timedelta(seconds=float(machines[i].sorted_jobs[j].startTime)),
+            Finish='2020-11-07 %s'%datetime.timedelta(seconds=float(machines[i].sorted_jobs[j].endTime)),
+            Recipe=machines[i].sorted_jobs[j].RECIPE,
+            Machine=machines[i].EQP_ID))
 
+#呈現圖表
+fig1 = px.timeline(df, x_start="Start", x_end="Finish", y="Machine", color="Recipe",text="Task")
 
-
-# #呈現圖表
-# fig1 = px.timeline(df, x_start="Start", x_end="Finish", y="Machine", color="Recipe",text="Task")
-# #fig2 = px.timeline(df, x_start="Start", x_end="Finish", y="Machine", color="Task",text="Task")
-# #sfig.update_yaxes(autorange="reversed")
-
-# fig1.show()
-# #fig2.show()
+fig1.show()
 
 
     
