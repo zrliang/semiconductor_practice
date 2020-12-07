@@ -3,8 +3,8 @@ import json
 from Job import * 
 from Machine import * 
 from Chromosome import * 
-import matplotlib.pyplot as plt
 
+import matplotlib.pyplot as plt
 import random
 import plotly.express as px
 import datetime
@@ -13,14 +13,14 @@ import time
 
 start = time.process_time()
 
-# Read data
+# import data
 wip = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=2, dtype=str)
 eqp = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=0, dtype=str)
 tool = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=1, dtype=str)
 setup_time = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=3, index_col=0)
 
 population_size=10  #66666
-num_iteration =10
+num_iteration =1
 crossover_rate=1    #66666
 mutation_rate=1     #66666
 
@@ -35,7 +35,7 @@ chromosomes = []
 for i in range(population_size):
     chromosomes.append(Chromosome(len(jobs))) #input ()
 
-# create machine
+# create machines
 machines=[]
 for i in range(len(tool.values)):
     machines.append(Machine(tool.iloc[i]))
@@ -49,55 +49,21 @@ for x in range(num_iteration):
     ##
     parent_list = deepcopy(chromosomes)
     offspring_list= deepcopy(chromosomes)
-    s=list(np.random.permutation(population_size)) #[0,2,3,1]
-    #s=[0,1,2,3]
-    for m in range(int(population_size/2)): #2
-        crossover_prob=np.random.rand()
-        if crossover_rate>=crossover_prob: 
 
-            parent1= deepcopy(parent_list[s[2*m]].probability)
-            parent2= deepcopy(parent_list[s[2*m+1]].probability)
-
-            size=range(1,len(jobs)*2 +1)  #染色體大小 #10+10(1~20)   #1~100 
-            #test
-            # size=range(1,7)  #6666666666666666666666
-
-            CutPoint=random.sample(size, 2) 
-            CutPoint.sort()
-            #print(CutPoint)
-
-            child1= deepcopy(parent1)
-            child2= deepcopy(parent2)
-
-            child1[CutPoint[0]-1:CutPoint[1]]=parent2[CutPoint[0]-1:CutPoint[1]]
-            child2[CutPoint[0]-1:CutPoint[1]]=parent1[CutPoint[0]-1:CutPoint[1]]
-
-            offspring_list[s[2*m]].probability = deepcopy(child1)
-            offspring_list[s[2*m+1]].probability = deepcopy(child2)
+    Crossover(parent_list,offspring_list,population_size,len(jobs),crossover_rate)
 
     #------------------------Mutation------------------------------------
-    s=list(np.random.permutation(population_size)) #[0,2,3,1]
-    #print(s)
-    for m in range(len(offspring_list)):
-            mutation_prob=np.random.rand()
-            if mutation_rate >= mutation_prob:
-                
-                size=range(0,len(jobs)*2)  #染色體大小 #10+10(0~19)  #1~100 
-                #test
-                size=range(0,6)  #0-5  #6666666666666666666666
-                one_gene=random.sample(size, 1) 
-                #print("第",m+1,"次",one_gene[0])
-                offspring_list[s[m]].probability[one_gene[0]] = random.random()
+    mutation(population_size,offspring_list,mutation_rate,len(jobs))
 
     #-------------------- fitness value -------------------------------------
     total_chromosomes=deepcopy(parent_list)+deepcopy(offspring_list)
-
     # print("--total_chromosomes--")   
     # for i in range(8):
     #     print(total_chromosomes[i].probability)
 
+
     for k in range(len(total_chromosomes)):
-        total_chromosomes[k].makespan = 0
+        total_chromosomes[k].clear_values()
         # job set_probability
         for j in range(len(jobs)):
             jobs[j].set_probability(total_chromosomes[k].get_probability(j)) 
@@ -109,22 +75,44 @@ for x in range(num_iteration):
                     machines[i].jobs.append(jobs[j])
             machines[i].sort_job(setup_time)
 
-        # record makespan & clear job
+        # record makespan & tardiness_num
         for i in range(len(machines)):
+            # record makespan
             if machines[i].endTime > total_chromosomes[k].makespan :
                 total_chromosomes[k].makespan=machines[i].endTime
+            # record tardiness_num
+            for j in range(len(machines[i].sorted_jobs)): 
+                if  machines[i].sorted_jobs[j].startTime > float(machines[i].sorted_jobs[j].R_QT)*60:
+                    total_chromosomes[k].tardiness_num+=1
 
-            machines[i].clear_job()
+            machines[i].clear_job()            
+
+        #print(total_chromosomes[k].tardiness_num)
+        # record tardiness
+
+        # for i in range(len(machines)):
+        #     for j in range(len(machines[i].sorted_jobs)): 
+        #         if  machines[i].sorted_jobs[j].startTime > float(machines[i].sorted_jobs[j].R_QT)*60:
+        #             total_chromosomes[k].tardiness_num+=1
+
+        #     machines[i].clear_job()
         
         # print(total_chromosomes[k].makespan)
 
     #print("-------")
     #-----------------Selection----------------------
-    sorted_total_chromosomes = sorted(total_chromosomes, key=lambda e:e.makespan, reverse = False) #排序
+
+    for t in range(len(total_chromosomes)):
+        print(total_chromosomes[t].makespan,total_chromosomes[t].tardiness_num)
+        total_chromosomes[t].target_value= 0.0001* total_chromosomes[t].makespan + 0.9999*total_chromosomes[t].tardiness_num
+        print(total_chromosomes[t].target_value)
+    print("-----")
+    sorted_total_chromosomes = sorted(total_chromosomes, key=lambda e:e.target_value, reverse = False) #小到大
+
 
     chromosomes= deepcopy(sorted_total_chromosomes[:population_size]) #elite #下一代 #list
     MakespanRecord.append(chromosomes[0].makespan)
-    
+     
     # #輪盤法
     # def sum(num): #分母
     #     sum = 0
@@ -164,11 +152,11 @@ for x in range(num_iteration):
     #     chromosomes.append(sorted_total_chromosomes[i])
 
 
-
 # -----------------Result----------------------
 
 ## final job & machine condition
 # job set_probability
+print("tardiness=",chromosomes[0].tardiness_num)
 
 for j in range(len(jobs)):
     jobs[j].set_probability(chromosomes[0].get_probability(j)) 
