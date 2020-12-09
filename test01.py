@@ -1,9 +1,10 @@
-import pandas as pd
-import json
+# importing required modules
 from Job import * 
 from Machine import * 
 from Chromosome import * 
 
+import pandas as pd
+import json
 import matplotlib.pyplot as plt
 import random
 import plotly.express as px
@@ -13,18 +14,25 @@ import time
 
 start = time.process_time()
 
+# -------------initialization setting-------------
 # import data
 wip = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=2, dtype=str)
 eqp = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=0, dtype=str)
 tool = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=1, dtype=str)
-setup_time = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=3, index_col=0)
+setup_time = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=3, index_col=0) #index can sue
 
-population_size=10  #66666
-num_iteration =1
-crossover_rate=1    #66666
-mutation_rate=1     #66666
+# Selection setting (roulette_wheel) 
+population_size=10  #6666
+num_iteration =20
+crossover_rate=1    #6666
+mutation_rate=1     #6666
 
-# ---------------Frame----------------
+elite_selection_size=int(population_size*0.2) 
+rank_selection_size= population_size*2 - elite_selection_size 
+rank_selection_num= population_size- elite_selection_size
+proba_list = rank_selection_get_proba_list(rank_selection_size) 
+
+# --------------------Frame-------------------------
 # create jobs
 jobs = []
 for i in range(len(wip.values)): #job len (100)
@@ -40,27 +48,21 @@ machines=[]
 for i in range(len(tool.values)):
     machines.append(Machine(tool.iloc[i]))
 
-# ------------------------------------
+#--------------------------------------------------
+# 迭代
 MakespanRecord=[]
 
-# 迭代
 for x in range(num_iteration):
-    #------------------------Crossover------------------------------------
-    ##
     parent_list = deepcopy(chromosomes)
     offspring_list= deepcopy(chromosomes)
-
-    Crossover(parent_list,offspring_list,population_size,len(jobs),crossover_rate)
+    #------------------------Crossover------------------------------------
+    offspring_list = Crossover(parent_list,offspring_list,population_size,len(jobs),crossover_rate)
 
     #------------------------Mutation------------------------------------
-    mutation(population_size,offspring_list,mutation_rate,len(jobs))
+    offspring_list = mutation(population_size,offspring_list,mutation_rate,len(jobs))
 
     #-------------------- fitness value -------------------------------------
     total_chromosomes=deepcopy(parent_list)+deepcopy(offspring_list)
-    # print("--total_chromosomes--")   
-    # for i in range(8):
-    #     print(total_chromosomes[i].probability)
-
 
     for k in range(len(total_chromosomes)):
         total_chromosomes[k].clear_values()
@@ -87,76 +89,44 @@ for x in range(num_iteration):
 
             machines[i].clear_job()            
 
-        #print(total_chromosomes[k].tardiness_num)
-        # record tardiness
-
-        # for i in range(len(machines)):
-        #     for j in range(len(machines[i].sorted_jobs)): 
-        #         if  machines[i].sorted_jobs[j].startTime > float(machines[i].sorted_jobs[j].R_QT)*60:
-        #             total_chromosomes[k].tardiness_num+=1
-
-        #     machines[i].clear_job()
-        
+      
         # print(total_chromosomes[k].makespan)
 
     #print("-------")
     #-----------------Selection----------------------
 
     for t in range(len(total_chromosomes)):
-        print(total_chromosomes[t].makespan,total_chromosomes[t].tardiness_num)
-        total_chromosomes[t].target_value= 0.0001* total_chromosomes[t].makespan + 0.9999*total_chromosomes[t].tardiness_num
-        print(total_chromosomes[t].target_value)
-    print("-----")
+        #print(total_chromosomes[t].makespan,total_chromosomes[t].tardiness_num)
+        total_chromosomes[t].target_value= 0.01* total_chromosomes[t].makespan + 0.99*total_chromosomes[t].tardiness_num
+       # print(total_chromosomes[t].target_value)
+
+    #排序，依target_value
     sorted_total_chromosomes = sorted(total_chromosomes, key=lambda e:e.target_value, reverse = False) #小到大
 
+    #rank_selection(consider elite)
+    select_index= rank_selection_get_select_index(proba_list,rank_selection_num)
 
-    chromosomes= deepcopy(sorted_total_chromosomes[:population_size]) #elite #下一代 #list
-    MakespanRecord.append(chromosomes[0].makespan)
+    #next Gen(elite & rank)
+    chromosomes=[]
+    for i in range(elite_selection_size):
+        chromosomes.append(sorted_total_chromosomes[i])
+        print(sorted_total_chromosomes[i].makespan,sorted_total_chromosomes[i].tardiness_num,sorted_total_chromosomes[i].target_value)
+    for j in select_index:
+        chromosomes.append(sorted_total_chromosomes[elite_selection_size + j])
+        print(sorted_total_chromosomes[j].makespan,sorted_total_chromosomes[j].tardiness_num,sorted_total_chromosomes[j].target_value)
+
+    print("------")
+
+    #收斂圖record
+    MakespanRecord.append(chromosomes[0].target_value)
      
-    # #輪盤法
-    # def sum(num): #分母
-    #     sum = 0
-    #     x=1
-    #     while x < num+1:
-    #         sum = sum + x
-    #         x+=1
-    #     return sum
-    # Sum=sum(population_size*2) #1+2+..+90
-
-    # t=0
-    # proba_list=[0]
-    # for i in range(population_size*2-1):
-    #     proba=(population_size*2-i)/Sum #90/1+...
-    #     t+=proba
-    #     proba_list.append(t)
-    # #print(proba_list)
-
-    # def getk2(): #得index
-    #     selectone=random.random()
-    #     k2=-1
-    #     for i in range(len(proba_list)):
-    #         if(selectone>proba_list[i]):
-    #             k2+=1
-    #     return k2
-
-    # select_index=[]
-    # count=0
-    # while(len(select_index)<population_size): #不重複 #40個
-    #     count+=1
-    #     temp=getk2()
-    #     if(temp not in select_index):
-    #         select_index.append(temp)
-
-    # chromosomes=[]
-    # for i in select_index:
-    #     chromosomes.append(sorted_total_chromosomes[i])
-
-
 # -----------------Result----------------------
 
 ## final job & machine condition
 # job set_probability
 print("tardiness=",chromosomes[0].tardiness_num)
+print("makespan=",chromosomes[0].makespan)
+print("target_value=",chromosomes[0].target_value)
 
 for j in range(len(jobs)):
     jobs[j].set_probability(chromosomes[0].get_probability(j)) 
@@ -178,8 +148,8 @@ processT=end-start
 print("執行時間:",processT)
 
 #收斂圖
-plt.plot([i for i in range(len(MakespanRecord))],MakespanRecord,'b') #x,y為list資料
-plt.ylabel('makespan',fontsize=15)
+plt.plot(["%d" %i for i in range(len(MakespanRecord))],MakespanRecord,'b') #x,y為list資料
+plt.ylabel('target_value',fontsize=15)
 plt.xlabel('generation',fontsize=15)
 plt.show()
 
