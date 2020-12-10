@@ -8,26 +8,21 @@ class Machine(object):
             setattr(self, i, self.configure[i])
         self.startTime= int(self.configure["RECOVER_TIME"])
 
-
         self.jobs = [] #未排
         self.sorted_jobs=[]
         self.endTime=0
 
-    # def add_job(self,job_id,job_machine_id,job_sort_prob):
-    #     if self.configure["EQP_ID"]==job_machine_id:
-    #         self.jobs.append(job_id)
-    #         self.job_sort_prob.append(job_sort_prob)
+    def add_job(self,jobs):
+        for i in range(len(jobs)):
+            if self.configure["EQP_ID"]==jobs[i].machineID:
+                self.jobs.append(jobs[i])
+    
 
-    def add_job(self,job):
-        self.jobs.append(job)
-        #self.job_sort_prob.append(job_sort_prob)
-
-
-    def sort_job(self,setuptime_Table):
-
+    def sort_job(self):
         self.sorted_jobs = sorted(self.jobs, key=lambda e:e.probability[1], reverse = True) #二維排序(x[1]針對 jobs物件 的prob[1]) 由大到小
         #self.sorted_jobs = sorted(self.jobs, key=lambda e:float(e.R_QT), reverse = False) #二維排序(x[1]針對 jobs物件 的prob[1]) 用R_QT
 
+    def calculate_process_time(self,setuptime_Table):
         currentTime = int(self.configure["RECOVER_TIME"])
         #print(currentTime)
         # set start & end Time

@@ -8,8 +8,6 @@ class Chromosome():
         self.size = size
         self.generate_probability()
 
-        # self.jobs=[] # X
-        # self.machines=[] # X
         self.makespan=0
         self.tardiness_num=0
 
@@ -33,13 +31,6 @@ class Chromosome():
         self.makespan=0
         self.tardiness_num=0
 
-    # def getMakespan(self):
-    #     for i in range(len(self.machines)):
-    #         print(self.machines[i].endTime)
-    #         if self.machines[i].endTime > self.makespan:
-    #             self.makespan= self.machines[i].endTime
-    #     print(self.makespan)
-    #     print("--------")
 
 # Crossover
 def Crossover(parent_list,offspring_list,population_size,jobs_size,crossover_rate):
@@ -140,8 +131,8 @@ def A(a,b):
     a=2
     b=3
     return b
+A(a,b)
 
-b= A(a,b)
 print(a,b)
 
 

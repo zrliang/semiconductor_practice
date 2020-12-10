@@ -22,10 +22,10 @@ tool = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=1, dtype=str
 setup_time = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=3, index_col=0) #index can sue
 
 # Selection setting (roulette_wheel) 
-population_size=10  #6666
-num_iteration =20
-crossover_rate=1    #6666
-mutation_rate=1     #6666
+population_size=10  #66
+num_iteration =70
+crossover_rate=1    #66
+mutation_rate=1     #66
 
 elite_selection_size=int(population_size*0.2) 
 rank_selection_size= population_size*2 - elite_selection_size 
@@ -66,19 +66,18 @@ for x in range(num_iteration):
 
     for k in range(len(total_chromosomes)):
         total_chromosomes[k].clear_values()
+
         # job set_probability
         for j in range(len(jobs)):
             jobs[j].set_probability(total_chromosomes[k].get_probability(j)) 
 
-        # add jobs to machine(object) 可改在裡面
+        # machine action
         for i in range(len(machines)):
-            for j in range(len(jobs)): 
-                if machines[i].configure["EQP_ID"]==jobs[j].machineID:
-                    machines[i].jobs.append(jobs[j])
-            machines[i].sort_job(setup_time)
-
-        # record makespan & tardiness_num
-        for i in range(len(machines)):
+            machines[i].add_job(jobs)
+            machines[i].sort_job()     
+            machines[i].calculate_process_time(setup_time)     
+  
+            # record makespan & tardiness_num
             # record makespan
             if machines[i].endTime > total_chromosomes[k].makespan :
                 total_chromosomes[k].makespan=machines[i].endTime
@@ -89,8 +88,6 @@ for x in range(num_iteration):
 
             machines[i].clear_job()            
 
-      
-        # print(total_chromosomes[k].makespan)
 
     #print("-------")
     #-----------------Selection----------------------
@@ -123,32 +120,38 @@ for x in range(num_iteration):
 # -----------------Result----------------------
 
 ## final job & machine condition
-# job set_probability
-print("tardiness=",chromosomes[0].tardiness_num)
-print("makespan=",chromosomes[0].makespan)
-print("target_value=",chromosomes[0].target_value)
 
+# job set_probability
 for j in range(len(jobs)):
     jobs[j].set_probability(chromosomes[0].get_probability(j)) 
 
-# add jobs to machine(object) 可改在裡面
+# machine action
 for i in range(len(machines)):
-    for j in range(len(jobs)): 
-        if machines[i].configure["EQP_ID"]==jobs[j].machineID:
-            machines[i].jobs.append(jobs[j])
-    machines[i].sort_job(setup_time)
-
-# record makespan & clear job
-for i in range(len(machines)):
+    machines[i].add_job(jobs)
+    machines[i].sort_job()     
+    machines[i].calculate_process_time(setup_time)    
+ 
+    # record makespan & tardiness_num
+    # record makespan
     if machines[i].endTime > chromosomes[0].makespan :
         chromosomes[0].makespan=machines[i].endTime
+    # record tardiness_num
+    for j in range(len(machines[i].sorted_jobs)): 
+        if  machines[i].sorted_jobs[j].startTime > float(machines[i].sorted_jobs[j].R_QT)*60:
+            chromosomes[0].tardiness_num+=1
+
+
+print("tardiness=",chromosomes[0].tardiness_num)
+print("makespan=",chromosomes[0].makespan)
+print("target_value=",chromosomes[0].target_value)
 
 end = time.process_time()
 processT=end-start
 print("執行時間:",processT)
 
 #收斂圖
-plt.plot(["%d" %i for i in range(len(MakespanRecord))],MakespanRecord,'b') #x,y為list資料
+# "%d" %i
+plt.plot([i for i in range(len(MakespanRecord))],MakespanRecord,'b') #x,y為list資料
 plt.ylabel('target_value',fontsize=15)
 plt.xlabel('generation',fontsize=15)
 plt.show()
@@ -177,8 +180,4 @@ for i in range(len(machines)):
 
 #呈現圖表
 fig1 = px.timeline(df, x_start="Start", x_end="Finish", y="Machine", color="Recipe",text="Task")
-
 fig1.show()
-
-
-    
