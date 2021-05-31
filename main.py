@@ -23,7 +23,7 @@ setup_time = pd.read_excel("./semiconductor_data.xlsx", sheet_name=3, index_col=
 
 # Selection setting (roulette_wheel) 
 population_size=50  #66
-num_iteration =200
+num_iteration =500
 crossover_rate=1    #66
 mutation_rate=1     #66
 
@@ -109,12 +109,12 @@ for x in range(num_iteration):
     chromosomes=[]
     for i in range(elite_selection_size):
         chromosomes.append(sorted_total_chromosomes[i])
-        print(sorted_total_chromosomes[i].makespan,sorted_total_chromosomes[i].tardiness_num,sorted_total_chromosomes[i].target_value)
+        #print(sorted_total_chromosomes[i].makespan,sorted_total_chromosomes[i].tardiness_num,sorted_total_chromosomes[i].target_value)
     for j in select_index:
         chromosomes.append(sorted_total_chromosomes[elite_selection_size + j])
-        print(sorted_total_chromosomes[j].makespan,sorted_total_chromosomes[j].tardiness_num,sorted_total_chromosomes[j].target_value)
+        #print(sorted_total_chromosomes[j].makespan,sorted_total_chromosomes[j].tardiness_num,sorted_total_chromosomes[j].target_value)
 
-    print("------")
+    #print("------")
 
     #收斂圖record
     MakespanRecord.append(chromosomes[0].target_value)
@@ -147,7 +147,10 @@ print("tardiness=",chromosomes[0].tardiness_num)
 print("makespan=",chromosomes[0].makespan)
 print("target_value=",chromosomes[0].target_value)
 
-end_import = time.process_time()
+end_import = time.process_time() 
+
+
+
 process_import=end_import-start_import
 
 print("執行時間:",process_import)
