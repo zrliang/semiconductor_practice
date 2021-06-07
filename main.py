@@ -23,7 +23,7 @@ setup_time = pd.read_excel("./semiconductor_data.xlsx", sheet_name=3, index_col=
 
 # Selection setting (roulette_wheel) 
 population_size=50  #66
-num_iteration =500
+num_iteration =30
 crossover_rate=1    #66
 mutation_rate=1     #66
 
@@ -90,15 +90,13 @@ for x in range(num_iteration):
 
             machines[i].clear_job()            
 
-
-    #print("-------")
+        total_chromosomes[k].target_value= 0.01* total_chromosomes[k].makespan + 0.99*total_chromosomes[k].tardiness_num
+    
+    # for t in range(len(total_chromosomes)):
+    #     #print(total_chromosomes[t].makespan,total_chromosomes[t].tardiness_num)
+    #     total_chromosomes[t].target_value= 0.01* total_chromosomes[t].makespan + 0.99*total_chromosomes[t].tardiness_num
+    
     #-----------------Selection----------------------
-
-    for t in range(len(total_chromosomes)):
-        #print(total_chromosomes[t].makespan,total_chromosomes[t].tardiness_num)
-        total_chromosomes[t].target_value= 0.01* total_chromosomes[t].makespan + 0.99*total_chromosomes[t].tardiness_num
-       # print(total_chromosomes[t].target_value)
-
     #排序，依target_value
     sorted_total_chromosomes = sorted(total_chromosomes, key=lambda e:e.target_value, reverse = False) #小到大
 
