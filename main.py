@@ -147,8 +147,6 @@ print("target_value=",chromosomes[0].target_value)
 
 end_import = time.process_time() 
 
-
-
 process_import=end_import-start_import
 
 print("執行時間:",process_import)
