@@ -10,9 +10,10 @@ file = 'result.csv'
 with open(file) as csvFile:
     csvReader = csv.reader(csvFile)
     datas = list(csvReader)
-print(datas)
+#print(datas)
 
-
+for data in datas[:1]:
+    print(float(data[4])*60)   
 # time_stamp = 1624923000 # 設定timeStamp
 # struct_time = time.localtime(time_stamp) # 轉成時間元組
 # print(struct_time)
