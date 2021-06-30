@@ -19,7 +19,7 @@ start_import = time.process_time()
 wip = pd.read_excel("./semiconductor_data.xlsx", sheet_name=2, dtype=str)
 eqp = pd.read_excel("./semiconductor_data.xlsx", sheet_name=0, dtype=str)
 tool = pd.read_excel("./semiconductor_data.xlsx", sheet_name=1, dtype=str)
-setup_time = pd.read_excel("./semiconductor_data.xlsx", sheet_name=3, index_col=0) #index can sue
+setup_time = pd.read_excel("./semiconductor_data.xlsx", sheet_name=3, index_col=0) #index can use
 
 # Selection setting (roulette_wheel) 
 population_size=50  #66
