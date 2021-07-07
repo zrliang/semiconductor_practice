@@ -15,6 +15,8 @@ ini_time_stamp = 1618615800
 df=[]
 count=0
 for i in range(len(entity_key_list)): 
+
+    
     key= entity_key_list[i]
     count+=1
     for j in range(len(entities.groups[key])):
