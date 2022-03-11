@@ -10,7 +10,6 @@ class Chromosome():
 
         self.makespan=0
         self.tardiness_num=0
-
         self.target_value=0
 
     def __str__(self): #須為字串str

@@ -23,7 +23,7 @@ setup_time = pd.read_excel("./semiconductor_data.xlsx", sheet_name=3, index_col=
 
 # Selection setting (roulette_wheel) 
 population_size=50  #66
-num_iteration =30
+num_iteration =10
 crossover_rate=1    #66
 mutation_rate=1     #66
 
